@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration status="INFO">
+    <!--先定义所有的appender-->
+    <appenders>
+        <!--这个输出控制台的配置-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--这个是输出日志的格式-->
+            <PatternLayout pattern="222222222222222 %d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </Console>
+        <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，适合临时测试用-->
+        <File name="Error" fileName="E:Log/classtao/error.log " append="false">
+            <!--文件只记录level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="UTF-8" pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </File>
+
+        <!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="RollingFile" fileName="E:Log/classtao/error.log"
+                     filePattern="E:Log/$${date:yyyy-MM}/history-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
+        </RollingFile>
+    </appenders>
+    <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <loggers>
+        <logger name="log4j.logger.noModule" level="fatal" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.org.mybatis.jpetstore" level="trace" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.com.opensymphony.xwork2" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.com.ibatis" level="trace" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.com.ibatis.common.jdbc.SimpleDataSource" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.com.ibatis.common.jdbc.ScriptRunner" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.org.mybatis" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.java.sql" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.java.sql.Connection" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.java.sql.Statement" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.java.sql.PreparedStatement" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="log4j.logger.java.sql.ResultSet" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+        <!--建立一个默认的root的logger-->
+        <root level="INFO">
+            <appender-ref ref="Error"/>
+            <appender-ref ref="RollingFile"/>
+            <appender-ref ref="Console"/>
+        </root>
+    </loggers>
+</configuration>
